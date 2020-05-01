@@ -10,6 +10,11 @@ module.exports = {
                                 .select('*')
                                 .first()
 
-        return response.json(users)
+        const data = {
+            id: users.id,
+            name: users.name
+        }
+
+        return response.json(data)
     }
 }
