@@ -9,4 +9,4 @@ app.use(cors('http://192.168.0.9:3000'))
 app.use(express.json())
 app.use(routes)
 
-app.listen(3333)
+app.listen(process.env.PORT || 3333)
