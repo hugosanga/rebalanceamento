@@ -10,11 +10,15 @@ module.exports = {
                                 .select('*')
                                 .first()
 
-        const data = {
-            id: users.id,
-            name: users.name
-        }
+        if (users) {
+            const data = {
+                id: users.id,
+                name: users.name
+            }
 
-        return response.json(data)
+            return response.json(data)
+        } else {
+            return response.json([])
+        }
     }
 }
