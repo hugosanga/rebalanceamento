@@ -5,7 +5,7 @@ const routes = require('./routes')
 
 app = express()
 
-app.use(cors())
+app.use(cors('https://rebalanceamento-frontend.herokuapp.com/'))
 app.use(express.json())
 app.use(routes)
 
