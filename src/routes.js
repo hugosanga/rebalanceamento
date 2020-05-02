@@ -8,7 +8,7 @@ const LoginController = require('./controllers/LoginController')
 routes = express.Router()
 
 routes.post('/users', UserController.create)
-// routes.get('/users', UserController.list)
+routes.get('/users', UserController.list)
 routes.put('/users/:id', UserController.edit)
 routes.delete('/users/:id', UserController.delete)
 

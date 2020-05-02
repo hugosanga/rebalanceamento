@@ -4,8 +4,7 @@ module.exports = {
     async list(request, response) {
         const { email } = request.params
 
-        const db_connection = connection.connect('admin')
-        const users = await db_connection('users')
+        const users = await connection('users')
                                 .where('email', email)
                                 .select('*')
                                 .first()

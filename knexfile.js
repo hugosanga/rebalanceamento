@@ -2,18 +2,16 @@
 
 module.exports = {
 
-    development(db) {
-        return {
-            client: 'sqlite3',
-            connection: {
-                filename: `./src/database/${db === 'admin' ? 'admin' : db}.sqlite`
-            },
-            migrations: {
-                directory: `./src/database/migrations/${db === 'admin' ? 'admin' : 'users'}`
-            },
-            useNullAsDefault: true
-        }
+  development: {
+    client: 'sqlite3',
+    connection: {
+      filename: './src/database/db.sqlite'
     },
+    migrations: {
+      directory: './src/database/migrations'
+    },
+    useNullAsDefault: true
+  },
 
   staging: {
     client: 'postgresql',
@@ -32,18 +30,13 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
     migrations: {
-      tableName: 'knex_migrations'
+      directory: __dirname + '/src/database/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/src/database/seeds'
     }
   }
 

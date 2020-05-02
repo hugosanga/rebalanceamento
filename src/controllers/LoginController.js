@@ -5,8 +5,7 @@ module.exports = {
     async checkCredentials(request, response) {
         const { email, password } = request.body
 
-        const db_connection = connection.connect('admin')
-        const user = await db_connection('users')
+        const user = await connection('users')
                                 .where('email', email)
                                 .select('*')
                                 .first()
@@ -21,6 +20,6 @@ module.exports = {
 
         }
 
-        return response.json({ error: 'Email ou senha incorretos.'})
+        return response.json({ error: 'Email ou senha incorretos.' })
     }
 }

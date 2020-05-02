@@ -35,25 +35,21 @@ module.exports = {
         const { ticker, amount, grade } = request.body
         const user_id = request.headers.authorization
 
-        if (!fs.existsSync(__dirname + `/../database/${user_id}.sqlite`)) {
-            return response.json({ error: 'Usuário não existe!'})
-        }
-
         const { type, sector, price, subSector, error } = await getTickerDetails(ticker + '.sa')
 
         if (error) {
             return response.json({ error: 'Não foi possível localizar esta ação.' })
         }
 
-        const db_connection = connection.connect(user_id)
-        const [id] = await db_connection('stocks')
+        const [id] = await connection('stocks')
                 .insert({
                     ticker,
                     type,
                     sector,
                     amount,
                     grade,
-                    subSector
+                    subSector,
+                    user_id
                 })
 
         return response.json({ id, type, sector, price })
@@ -62,12 +58,8 @@ module.exports = {
     async list(request, response) {
         const user_id = request.headers.authorization
 
-        if (!fs.existsSync(__dirname + `/../database/${user_id}.sqlite`)) {
-            return response.json({ error: 'Usuário não existe!'})
-        }
-
-        const db_connection = connection.connect(user_id)
-        const stocks = await db_connection('stocks')
+        const stocks = await connection('stocks')
+                                .where('user_id', user_id)
                                 .select('*')
 
         if (stocks) {
@@ -85,12 +77,9 @@ module.exports = {
         const { id } = request.params
         const user_id = request.headers.authorization
 
-        if (!fs.existsSync(__dirname + `/../database/${user_id}.sqlite`)) {
-            return response.json({ error: 'Usuário não existe!'})
-        }
 
-        const db_connection = connection.connect(user_id)
-        const status = await db_connection('stocks')
+        const status = await connection('stocks')
+                                .where('user_id', user_id)
                                 .where('id', id)
                                 .update('amount', amount)
                                 .update('grade', grade)
@@ -102,12 +91,8 @@ module.exports = {
         const { id } = request.params
         const user_id = request.headers.authorization
 
-        if (!fs.existsSync(__dirname + `/../database/${user_id}.sqlite`)) {
-            return response.json({ error: 'Usuário não existe!'})
-        }
-
-        const db_connection = connection.connect(user_id)
-        const status = await db_connection('stocks')
+        const status = await connection('stocks')
+                                .where('user_id', user_id)
                                 .where('id', id)
                                 .delete()
 
