@@ -1,7 +1,6 @@
 const connection = require('../database/connection')
 const yahooFinance = require('yahoo-finance')
 const stocksDetails = require('../services/stocksDetails')
-const fs = require('fs')
 
 const getTickerDetails = async (ticker) => {
 
@@ -41,18 +40,26 @@ module.exports = {
             return response.json({ error: 'Não foi possível localizar esta ação.' })
         }
 
-        const [id] = await connection('stocks')
-                .insert({
-                    ticker,
-                    type,
-                    sector,
-                    amount,
-                    grade,
-                    subSector,
-                    user_id
-                })
+        try {
 
-        return response.json({ id, type, sector, price })
+            const [id] = await connection('stocks')
+                                    .insert({
+                                        ticker,
+                                        type,
+                                        sector,
+                                        amount,
+                                        grade,
+                                        subSector,
+                                        user_id
+                                    })
+
+            return response.json({ id, type, sector, price })
+
+        } catch (err) {
+            console.log(err)
+
+            return response.json({ err })
+        }
     },
 
     async list(request, response) {
