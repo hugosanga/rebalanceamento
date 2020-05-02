@@ -14,7 +14,7 @@ const getTickerDetails = async (ticker) => {
 
         const price = quotes.price.regularMarketPrice
 
-        const details = stocksDetails.getDetails(ticker)
+        const details = await stocksDetails.getDetails(ticker)
         const type = details['SETOR'] === 'Fundos Imobiliários' ?
                     'FII' :
                     (details['SETOR'] === 'ETF' ? 'ETF' : 'Ação')
@@ -56,7 +56,6 @@ module.exports = {
             return response.json({ id, type, sector, price })
 
         } catch (err) {
-            console.log(err)
 
             return response.json({ err })
         }
